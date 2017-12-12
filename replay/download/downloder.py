@@ -2,12 +2,14 @@ from lxml import html
 import requests
 import urllib.request
 from tqdm import tqdm
-
+import Validierung
 
 class downloder:
 
-	def __init__(self,Europa=False,Korea=False,Nordamerika=False):
+	def __init__(self,Europa=False,Korea=False,Nordamerika=False,Qualitaet=[],Version=""):
 		
+		#Dient zur ueberpruefung der Version
+		self.version=Version
 		#Dient zur messung des Fortschritts
 		self.absolviert=0
 		#Lister ueber URLs der zu Downloadenen Ligen 
@@ -16,6 +18,8 @@ class downloder:
 		self.links=[]
 		#Lister der Links zu den Replayverzeichnissen der Einzelnen Spieler
 		self.spieler=[]
+		#Dient zur Sicherstellung der Qualitaet
+		self.qualitaet=Qualitaet
 		#bools zur bestimmung der zu downloadenen Ligen
 		self.europa=Europa
 		self.nordamerika=Nordamerika
@@ -27,16 +31,19 @@ class downloder:
 		
 		for durchlauf in range(len(self.liga_url)):
 			startseite=1
-		
-			while(startseite <= Endseite):
+			qualitaet=True
+			print(" Das Sammeln der Spieler der Ligawird gestartet.\n Dies kann einige Zeit dauern.\n Es wurden bereits "+str(durchlauf+1)+" heruntergeladen")
+			
+			while(startseite <= Endseite and qualitaet):
 				
-				#zeigt den Fortschritt an
-				self.fortschritt(len(self.liga_url)*Endseite)
+				print(startseite)
 				#Speichern des Seitenquelltextes
 				seite = requests.get(self.liga_url[durchlauf]+str(startseite))
 				#Quelltext zu html
 				baum = html.fromstring(seite.content)
-				#Mittels xpath alle relavanten Knoten, die einen Link beinhalten speichern 
+				#Qualitaet pruefen
+				qualitaet=self.qualitaets_sicherung(baum)
+				#Mittels xpath alle relavanten Knoten, die einen Link beinhalten speichern
 				knoten = baum.xpath('//tr/td/a [@href]')
 				
 				for i in knoten:
@@ -48,18 +55,30 @@ class downloder:
 				startseite+=1
 				
 	def downloadlink_ermittlung(self):
-	
-		for replay_seite in self.spieler:
 		
+		for replay_seite in self.spieler:
+			
+			datum_index=0
 			self.fortschritt(len(self.spieler))
 			#Das gleiche spiel wie bei der ermittlung
 			seite = requests.get(replay_seite)
 			baum = html.fromstring(seite.content)
+			#Das Datum der replays abgreifen
+			datum = baum.xpath('//./td [@title]')
 			knoten = baum.xpath('//./a [@href]')
-			
+		
 			for i in knoten:
+			
 				if i.get("href")[:10]=="/download/":
-					self.links.append(i.get("href"))
+				
+					validator=Validierung.Validierung(datum[datum_index],self.version)
+					
+					if validator.datum_validirung():
+					
+						self.links.append(i.get("href"))
+						
+					datum_index+=1
+
 			
 	def liga_ermittlung(self):
 	
@@ -71,6 +90,29 @@ class downloder:
 			
 		if self.korea:
 			self.liga_url.append("http://sc2unmasked.com/Ladder?s=kr&top_league=grandmaster&mode=LOTV_SOLO&page=")
+	
+	def qualitaets_sicherung(self,baum):
+		
+		knoten = baum.xpath('//./img [@alt]')
+		alle_stufen=["gr","ma","di","pl"]
+		stufen=[]
+		sicher=True
+		
+		for i in knoten:
+			
+			if i.get("alt")[:2] in alle_stufen:
+
+				stufen.append(i.get("alt")[:2])
+		print(stufen)
+		
+		for i in stufen:
+			
+			if not(i in self.qualitaet):
+			
+				print("falsch")
+				sicher=False
+		return sicher
+				
 	
 	def fortschritt(self,Ziel):
 		
@@ -94,10 +136,16 @@ class downloder:
 			anfrage = requests.get(url, stream=True)
 
 			with open(dateiname+str(index)+".SC2Replay", "wb") as handle:
-				for data in tqdm(anfrage.iter_content()):
-					handle.write(data)
+				for replay in tqdm(anfrage.iter_content()):
+					handle.write(replay)
 				
 			index+=1
+			
+	def vorgang(self):
+	
+		self.sammelnspieler(100)
+		self.downloadlink_ermittlung()
+		self.download()
 
 if __name__=="__main__":
 	Downloade=downloder(True)
