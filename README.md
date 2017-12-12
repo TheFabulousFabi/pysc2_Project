@@ -20,3 +20,16 @@ The features we are planning to extract are:
 # Bots
 
 # Replays
+
+Downloadscript for Replays:
+
+In fact, that we wanted to learn with the best Replay's we created a script to download 
+pro Player replay's from the website http://sc2replaystats.com
+
+The script first of all sorts for Master or Grandmaster Player. After that we check
+if there is a download section. If there is a download section the Script starts the download.
+
+After this it automaticly goes to the next link and repeat the check.
+
+The script ignoeres lower ranked Replay's, so we secure that our 
+artificially neural networks get's the best replay's to learn.
