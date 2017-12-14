@@ -19,6 +19,12 @@ The features we are planning to extract are:
 
 # Bots
 
+We built several [bots](https://github.com/TheFabulousFabi/pysc2_Project/tree/master/bots "bots") to generate own datasets. Currently there are four different types of executable scenarios:
+* marines trying to kill roaches
+* marines attacking the enemy base
+* marines collecting mineral shards
+* marines moving to beacons
+
 # Replays
 
 Downloadscript for Replays:
@@ -33,3 +39,18 @@ After this it automaticly goes to the next link and repeat the check.
 
 The script ignoeres lower ranked Replay's, so we secure that our 
 artificially neural networks get's the best replay's to learn.
+
+# Progression
+
+# ToDo List
+
+* replay analysis
+  - extract data from a given state of a match
+* optimizing the downloadscript
+  - reset the console after execution
+  - print the links into a txt-file
+* expanding documentation
+  - add ToDo List
+  - add more information on the status of the downloadscript
+  - add more information on the replay analysis ("obs"-variable)
+  - add more information about what we already tried but didn't work (progression)
