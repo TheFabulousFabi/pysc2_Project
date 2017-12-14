@@ -44,13 +44,12 @@ artificially neural networks get's the best replay's to learn.
 
 # ToDo List
 
-* replay analysis
-  - extract data from a given state of a match
-* optimizing the downloadscript
-  - reset the console after execution
-  - print the links into a txt-file
-* expanding documentation
-  - add ToDo List
-  - add more information on the status of the downloadscript
-  - add more information on the replay analysis ("obs"-variable)
-  - add more information about what we already tried but didn't work (progression)
+* [ ] replay analysis (extract data from a given state of a match)
+* [x]optimizing the downloadscript
+  - [x] reset the console after execution
+  - [x] print the links into a txt-file
+* [ ] expanding documentation
+  - [x] add ToDo List
+  - [ ] add more information on the status of the downloadscript
+  - [ ] add more information on the replay analysis ("obs"-variable)
+  - [ ] add more information about what we already tried but didn't work (progression)
