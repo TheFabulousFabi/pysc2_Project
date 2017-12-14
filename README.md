@@ -27,18 +27,23 @@ We built several [bots](https://github.com/TheFabulousFabi/pysc2_Project/tree/ma
 
 # Replays
 
-Downloadscript for Replays:
+Downloadscript for replays:
 
-In fact, that we wanted to learn with the best Replay's we created a script to download 
-pro Player replay's from the website http://sc2replaystats.com
+In fact, that we wanted to learn with the best replays we created a script to download 
+pro player replays from the website http://sc2replaystats.com
 
-The script first of all sorts for Master or Grandmaster Player. After that we check
-if there is a download section. If there is a download section the Script starts the download.
+First of all the script sorts by players with master or grandmaster rank. After that we check
+if there is a download section. If there is a download section the script starts the download.
 
-After this it automaticly goes to the next link and repeat the check.
+After this it automatically moves to the next link and repeats the check.
 
-The script ignoeres lower ranked Replay's, so we secure that our 
-artificially neural networks get's the best replay's to learn.
+The script ignores lower ranked replays, so we secure that our 
+artificial neural networks gets the best replays to learn with.
+
+With the newest version of the script it is now possible to select the game version and minimum league for the replay files.
+In addition to this there is an option to print the URLs of the replays in a txt-file.
+
+Until further notice the work on the downloadscript is finished.
 
 # Progression
 
@@ -51,6 +56,6 @@ artificially neural networks get's the best replay's to learn.
   - [x] print the links into a txt-file
 * expanding documentation
   - [x] add ToDo List
-  - [ ] add more information on the status of the downloadscript
+  - [x] add more information on the status of the downloadscript
   - [ ] add more information on the replay analysis ("obs"-variable)
   - [ ] add more information about what we already tried but didn't work (progression)
