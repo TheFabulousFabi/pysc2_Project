@@ -50,6 +50,7 @@ Until further notice the work on the downloadscript is finished.
 To extract data from replays we tried to use two different programs which are provided by [pysc2](https://github.com/deepmind/pysc2 "pysc2"):
 * play.py (runs the replay visually in realtime)
 * replay_actions.py (returns all actions within the replay in the console)
+
 However we had some issues with running them on different systems as you can see in our progression.
 With "replay_actions.py" we managed to extract the data from a replay at a given time with a so called "obs"-variable.
 As far as known it is unfortunately not subscriptable, so the output has to be searched manually for specific units.
