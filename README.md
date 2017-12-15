@@ -27,7 +27,7 @@ We built several [bots](https://github.com/TheFabulousFabi/pysc2_Project/tree/ma
 
 # Replays
 
-Downloadscript for replays:
+**Downloadscript for replays:**
 
 In fact, that we wanted to learn with the best replays we created a script to download 
 pro player replays from the website http://sc2replaystats.com
@@ -45,17 +45,39 @@ In addition to this there is an option to print the URLs of the replays in a txt
 
 Until further notice the work on the downloadscript is finished.
 
+**Data extraction with replays:**
+
+To extract data from replays we tried to use two different programs which are provided by [pysc2](https://github.com/deepmind/pysc2 "pysc2"):
+* play.py (runs the replay visually in realtime)
+* replay_actions.py (returns all actions within the replay in the console)
+
+However we had some issues with running them on different systems as you can see in our progression.
+With "replay_actions.py" we managed to extract the data from a replay at a given time with a so called "obs"-variable.
+As far as known it is unfortunately not subscriptable, so the output has to be searched manually for specific units.
+
 # Progression
+
+**Data extraction with replays:**
+
+* on Windows
+  - pysc2.bin.play -> crash
+  - pysc2.bin.replay_actions -> crash
+* on Linux VM
+  - pysc2.bin.play -> works
+  - pysc2.bin.replay_actions -> replay invalid
+* on Linux laptop
+  - pysc2.bin.play -> works
+  - pysc2.bin.replay_actions -> works
 
 # ToDo List
 
 * replay analysis
-  - [ ] extract data from a given state of a match
+  - [x] extract data from a given state of a match
 * optimizing the downloadscript
   - [x] reset the console after execution
   - [x] print the links into a txt-file
 * expanding documentation
   - [x] add ToDo List
   - [x] add more information on the status of the downloadscript
-  - [ ] add more information on the replay analysis ("obs"-variable)
-  - [ ] add more information about what we already tried but didn't work (progression)
+  - [x] add more information on the replay analysis ("obs"-variable)
+  - [x] add more information about what we already tried but didn't work (progression)
