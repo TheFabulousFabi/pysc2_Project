@@ -59,15 +59,7 @@ As far as known it is unfortunately not subscriptable, so the output has to be s
 
 **Data extraction with replays:**
 
-* on Windows
-  - pysc2.bin.play -> crash
-  - pysc2.bin.replay_actions -> crash
-* on Linux VM
-  - pysc2.bin.play -> works
-  - pysc2.bin.replay_actions -> replay invalid
-* on Linux laptop
-  - pysc2.bin.play -> works
-  - pysc2.bin.replay_actions -> works
+
 
 # ToDo List
 
