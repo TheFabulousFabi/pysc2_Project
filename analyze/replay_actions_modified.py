@@ -25,6 +25,9 @@ import signal
 import sys
 import threading
 import time
+#-----
+import sammel
+#-----
 
 from future.builtins import range  # pylint: disable=redefined-builtin
 import six
@@ -257,33 +260,22 @@ class ReplayProcessor(multiprocessing.Process):
       self.stats.replay_stats.steps += 1
       self._update_stage("observe")
       obs = controller.observe()
-      
-      #---------- MODIFIED PART ----------
-      
-      try:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("----ANFANG----")
-      
-        out = str(obs).split(' ')
-        #print(obs)
+      #try:
 
-        print("Minerals: " + str(out[out.index("minerals:") + 1]))
+        #sammel.sammeln(obs)
+      sammel.sammeln(obs)
+    
 
-        print("GameLoop: " + str(out[out.index("game_loop:") + 1]))
-      
-        #print(out[out.index("minerals:") + 1])
-        print("\n")
+ 
 
 
 
-        print("----ENDE----")
+        #print("----ENDE----")
         #exit(1)
-      except:
-      	pass
+     # except:
+      #		pass
       
-      #---------- MOD END  ----------
-      
-      
+
       for action in obs.actions:
         act_fl = action.action_feature_layer
         if act_fl.HasField("unit_command"):
