@@ -25,6 +25,7 @@ import signal
 import sys
 import threading
 import time
+
 #-----
 import sammel
 #-----
@@ -249,7 +250,7 @@ class ReplayProcessor(multiprocessing.Process):
         replay_data=replay_data,
         map_data=map_data,
         options=interface,
-        observed_player_id=player_id))
+        observed_player_id=player_id))#player_id
 
     feat = features.Features(controller.game_info())
 
@@ -260,21 +261,30 @@ class ReplayProcessor(multiprocessing.Process):
       self.stats.replay_stats.steps += 1
       self._update_stage("observe")
       obs = controller.observe()
-      #try:
 
-        #sammel.sammeln(obs)
-      sammel.sammeln(obs)
-    
+      ####################################################
+      ####################################################
+      ####################################################
+      ####################################################
+      #--------------------------------------------------#
+      #--------------------------------------------------#
+      #--------------------------------------------------#
+      #--------------------------------------------------#
 
- 
-
-
-
-        #print("----ENDE----")
-        #exit(1)
-     # except:
-      #		pass
       
+      sammel.sammel(obs,player_id)                      # Abzapfen von obs 
+
+
+      #--------------------------------------------------#
+      #--------------------------------------------------#
+      #--------------------------------------------------#
+      #--------------------------------------------------#
+      ####################################################
+      ####################################################
+      ####################################################
+      ####################################################
+    
+        
 
       for action in obs.actions:
         act_fl = action.action_feature_layer
