@@ -2,6 +2,7 @@ import os
 import time
 import json
 
+#Dict for ID-Number to Name for Debugging
 idToName= {
     0: '',
     1: 'System_Snapshot_Dummy',
@@ -952,17 +953,11 @@ idToName= {
     1884: 'SnowGlazeStarterMP',
     }
 
-def sammel(obs,player_id):
+def sammel(obs,player_id):   
     
+    os.system("clear")			#Clear Console Output
 
-
-    timestamp = time.time()
-    
-    os.system("clear")
-
-    unitDictNum = dict()
     unitDictStr = dict()
-    abilities = []
 
     print(obs.observation.player_common.player_id)
     unitDictStr["playerID"] = player_id
@@ -974,9 +969,12 @@ def sammel(obs,player_id):
     unitDictStr["foodarmy"] = obs.observation.player_common.food_army
     unitDictStr["foodworkers"] = obs.observation.player_common.food_workers
 
+    #***************************************************************#
+    # Durch die ganzen Unit einträge in obs durch-iterieren und 	#
+    # auf den jeweiligen Key im Dict ein aufaddieren				#
+    #																#
+    #***************************************************************#
 
-
-    
     for unit in obs.observation.raw_data.units:
 
         if(unit.owner == player_id):
@@ -987,7 +985,7 @@ def sammel(obs,player_id):
             except(KeyError):
                 unitDictStr[str(unit.unit_type)] = 1
 
-    #-----PRINTS
+    #----------Konsolen Ausgaben----------#
  
     print(unitDictStr)
 
@@ -996,11 +994,12 @@ def sammel(obs,player_id):
     print("Saving...\n")
 
 
-
+    # Krampfhaft versuchen, ein Valides Json zu erzeugen 
+    # und bei jedem Durhclauf etwas hinzuzufügen...
+    # ... 
     try:
 
         with open ("result.json","r") as fp:
-
             result = fp.read()
 
 
@@ -1019,16 +1018,6 @@ def sammel(obs,player_id):
 
         result += str(unitDictStr).replace("'","\"")
         result += ("]")
-
-
-
-
-
-
-
-
-
-
 
 
     with open("result.json","w") as fp:
