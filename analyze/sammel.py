@@ -993,44 +993,43 @@ def sammel(obs,player_id):
 
     print("\n\n\n\n")
     
-    
-    #for key in sorted(unitDictNum):
-    #    print(str(idToName[key]).ljust(50,"~")+"Value: "+ str(unitDictStr[key]))
-
-
-    #-----
-
-    
-    #jsonarray = json.dumps(unitDictStr)
-    #jsonarray2 = json.loads(jsonarray)
-
-    #print(jsonarray2)
-
-    
-
     print("Saving...\n")
 
-    with open ("result.json","w") as fp:
-       #json.dump(unitDictStr,fp)
-        json.dump(unitDictStr, fp, indent=4, sort_keys=False)
-        json.dump(unitDictStr, fp, indent=4, sort_keys=False)
 
 
-    
-    #print("Reading...\n")
-    #with open("result.json","r") as fp:
-    #    jsonarray2 = fp.read()
+    try:
 
-    print(jsonarray2)
+        with open ("result.json","r") as fp:
 
-    exit(0)
-    
-    #with open("result.json", "a") as text_file:
-        #text_file.write("[" + str(unitDictStr).replace("'","\"") + "]\n")
+            result = fp.read()
 
-        
 
-    #with open("testfile.json","a")as f:
-    #    f.write(str(unitDictStr)+"\n")
-    #    f.write(str(unitDictNum)+"\n")
-    #return
+        result = result.replace(" ","")[:-1]
+        result += ","
+        #result += json.dump(unitDictStr, fp, indent=4, sort_keys=False)
+
+        result += str(unitDictStr).replace("'","\"")
+
+        result += ("\n]")
+
+    except FileNotFoundError:
+
+        result = ("[")
+        #result += json.dump(unitDictStr, fp, indent=4, sort_keys=False)
+
+        result += str(unitDictStr).replace("'","\"")
+        result += ("]")
+
+
+
+
+
+
+
+
+
+
+
+
+    with open("result.json","w") as fp:
+        fp.write(result)
