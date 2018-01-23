@@ -2,8 +2,8 @@ import os
 import time
 import json
 
-#Dict for ID-Number to Name for Debugging
-idToName= {
+#Dict for ID_Number-to-Name for Debugging
+unitToName= {
     0: '',
     1: 'System_Snapshot_Dummy',
     2: 'Ball',
@@ -953,13 +953,29 @@ idToName= {
     1884: 'SnowGlazeStarterMP',
     }
 
-def sammel(obs,player_id):   
-    
-    os.system("clear")			#Clear Console Output
+def sammel(obs,player_id):
 
+
+
+    #timestamp = time.time()
+    
+    os.system("clear")
+
+    print("Player: \t" + str(obs.observation.player_common.player_id))
+    print("GameLoop: \t" + str(obs.observation.game_loop))
+
+    #with open("result.json","w") as fp:
+    #    fp.write(str(obs))
+    #exit(0)
+    #return
+    
+
+
+
+    unitDictNum = dict()
     unitDictStr = dict()
 
-    print(obs.observation.player_common.player_id)
+
     unitDictStr["playerID"] = player_id
     unitDictStr["gameloop"] = obs.observation.game_loop
     unitDictStr["minerals"] = obs.observation.player_common.minerals
@@ -970,11 +986,12 @@ def sammel(obs,player_id):
     unitDictStr["foodworkers"] = obs.observation.player_common.food_workers
 
     #***************************************************************#
-    # Durch die ganzen Unit einträge in obs durch-iterieren und 	#
-    # auf den jeweiligen Key im Dict ein aufaddieren				#
-    #																#
+    # Durch die ganzen Unit einträge in obs durch-iterieren und     #
+    # auf den jeweiligen Key im Dict ein aufaddieren                #
+    #                                                               #
     #***************************************************************#
 
+    
     for unit in obs.observation.raw_data.units:
 
         if(unit.owner == player_id):
@@ -985,23 +1002,44 @@ def sammel(obs,player_id):
             except(KeyError):
                 unitDictStr[str(unit.unit_type)] = 1
 
-    #----------Konsolen Ausgaben----------#
- 
-    print(unitDictStr)
+    
+    #-----Pick Winner---------------
 
-    print("\n\n\n\n")
+    for f in obs.player_result:
+        if(f.result == 1):
+            print(str(f.player_id) + " hat gewonnen")
+            unitDictStr["winner"] = f.player_id
+
+    #------------------------------
+
+    #----------Konsolen Ausgabe
+
+    for key in sorted(unitDictStr):
+        
+        try:
+            print(str(unitToName[int(key)]) + " ---> \t\t" + str(unitDictStr[key]))
+            
+        except(KeyError):
+            print(str(key)+ "\t hat Error")
+        except(ValueError):
+            print(str(key) + " ---> \t\t" + str(unitDictStr[key]))
+
+    #----------------------------------------
+
+
+    print("\n")
     
     print("Saving...\n")
-
 
     # Krampfhaft versuchen, ein Valides Json zu erzeugen 
     # und bei jedem Durhclauf etwas hinzuzufügen...
     # ... 
+
     try:
 
         with open ("result.json","r") as fp:
-            result = fp.read()
 
+            result = fp.read()
 
         result = result.replace(" ","")[:-1]
         result += ","
@@ -1019,6 +1057,9 @@ def sammel(obs,player_id):
         result += str(unitDictStr).replace("'","\"")
         result += ("]")
 
+
+
+    #-----Speichern-----------------------------------
 
     with open("result.json","w") as fp:
         fp.write(result)
