@@ -27,7 +27,7 @@ import threading
 import time
 
 #-----
-import sammel
+from collectoring import Collectoring 
 #-----
 
 from future.builtins import range  # pylint: disable=redefined-builtin
@@ -52,7 +52,7 @@ flags.DEFINE_integer("step_mul", 8, "How many game steps per observation.")
 flags.DEFINE_string("replays", None, "Path to a directory of replays.")
 flags.mark_flag_as_required("replays")
 
-
+replayBakup= ""
 size = point.Point(16, 16)
 interface = sc_pb.InterfaceOptions(
     raw=True, score=False,
@@ -216,11 +216,20 @@ class ReplayProcessor(multiprocessing.Process):
                 if info.local_map_path:
                   self._update_stage("open map file")
                   map_data = self.run_config.map_data(info.local_map_path)
+
+#---------------------------------------------------------------------------------------------------------
+
                 for player_id in [1, 2]:
+
+                  collect = Collectoring(replay_name,player_id)
+
                   self._print("Starting %s from player %s's perspective" % (
                       replay_name, player_id))
                   self.process_replay(controller, replay_data, map_data,
-                                      player_id)
+                                      player_id, collect) #collect added
+              
+
+
               else:
                 self._print("Replay is invalid.")
                 self.stats.replay_stats.invalid_replays.add(replay_name)
@@ -243,9 +252,10 @@ class ReplayProcessor(multiprocessing.Process):
     self.stats.update(stage)
     self.stats_queue.put(self.stats)
 
-  def process_replay(self, controller, replay_data, map_data, player_id):
+  def process_replay(self, controller, replay_data, map_data, player_id, collect): ##collect added
     """Process a single replay, updating the stats."""
     self._update_stage("start_replay")
+
     controller.start_replay(sc_pb.RequestStartReplay(
         replay_data=replay_data,
         map_data=map_data,
@@ -272,7 +282,7 @@ class ReplayProcessor(multiprocessing.Process):
       #--------------------------------------------------#
 
       
-      sammel.sammel(obs,player_id)                      # Abzapfen von obs 
+      collect.sammel(obs)                      # Abzapfen von obs 
 
 
       #--------------------------------------------------#
@@ -378,6 +388,13 @@ def main(unused_argv):
     print("Getting replay list:", FLAGS.replays)
     replay_list = sorted(run_config.replay_paths(FLAGS.replays))
     print(len(replay_list), "replays found.\n")
+    
+    # ----------
+    replayBakup = replay_list
+    print(replayBakup[0])
+    
+    # ----------
+    
     replay_queue = multiprocessing.JoinableQueue(FLAGS.parallel * 10)
     replay_queue_thread = threading.Thread(target=replay_queue_filler,
                                            args=(replay_queue, replay_list))
